@@ -1,0 +1,29 @@
+#include <IRremote.h>
+int RECV_PIN = 11;
+int buzzerPin = 2;
+#define code1  16724175
+#define code2  16718055
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+void setup()
+{
+  Serial.begin(9600);
+  irrecv.enableIRIn();
+  pinMode(buzzerPin, OUTPUT);
+  digitalWrite(buzzerPin, LOW);
+}
+void loop() {
+  if (irrecv.decode(&results)) {
+    Serial.print("รหัสปุ่มกด: ");
+    Serial.println(results.value);
+    if (results.value == code1) {
+      Serial.println("SOUND ON");
+      digitalWrite(buzzerPin, HIGH);
+    }
+    if (results.value == code2) {
+      Serial.println("SOUND OFF");
+      digitalWrite(buzzerPin, LOW);
+    }
+    irrecv.resume(); // Receive the next value
+  }
+}
